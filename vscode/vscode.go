@@ -1,4 +1,4 @@
-package dart
+package vscode
 
 import (
 	"fmt"

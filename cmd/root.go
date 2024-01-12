@@ -7,7 +7,9 @@ import (
 	"github.com/before80/h2m/dart"
 	"github.com/before80/h2m/docker"
 	"github.com/before80/h2m/mysql"
+	"github.com/before80/h2m/npmjs"
 	"github.com/before80/h2m/postgresql"
+	"github.com/before80/h2m/vscode"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -34,14 +36,20 @@ to quickly create a Cobra application.`,
 		case "dart":
 			dart.Html2md(cmd, args)
 		// 用法：h2m -e "dart" -u http://ft.cn/dart_docs_230826.html -t "dist/Dart_docs" -n "div.site-sidebar" -c "div.content" -b https://dart.dev/
+		case "vscode":
+			vscode.Html2md(cmd, args)
+		// 用法：h2m -e "vscode" -u http://ft.cn/vscode_docs_240112.html -t "dist/Vscode_docs" -n "nav#docs-navbar" -c "div.body" -b https://code.visualstudio.com/
 		case "postgresql":
 			postgresql.Html2md(cmd, args)
 			// 用法：h2m -e "postgresql" -u http://ft.cn/postgresql_docs_15_4.html -t "dist/Postgresql_docs" -n "div.toc" -c "div#docContent" -b https://www.postgresql.org/docs/current/
 		case "docker":
 			docker.Html2md(cmd, args)
-			// 用法：h2m -m "Guides" -e "docker" -u http://ft.cn/docker_guides_230830.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
-			// 用法：h2m -m "Manuals" -e "docker" -u http://ft.cn/docker_manuals_230830.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
-			// 用法：h2m -m "Reference" -e "docker" -u http://ft.cn/docker_reference_230830.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
+		// 用法：h2m -m "Guides" -e "docker" -u http://ft.cn/docker_guides_230830.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
+		// 用法：h2m -m "Manuals" -e "docker" -u http://ft.cn/docker_manuals_230830.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
+		// 用法：h2m -m "Reference" -e "docker" -u http://ft.cn/docker_reference_230830.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
+		case "npmjs":
+			npmjs.Html2md(cmd, args)
+			// 用法：h2m -e "npmjs" -u http://ft.cn/npmjs_230922.html -t "dist/npmjs_docs" -n "#menus" -c "#skip-nav" -b https://docs.npmjs.com/
 		}
 	},
 }
