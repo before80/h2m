@@ -6,6 +6,7 @@ package cmd
 import (
 	"github.com/before80/h2m/dart"
 	"github.com/before80/h2m/docker"
+	"github.com/before80/h2m/fiber"
 	"github.com/before80/h2m/grpc"
 	"github.com/before80/h2m/mysql"
 	"github.com/before80/h2m/npmjs"
@@ -48,12 +49,17 @@ to quickly create a Cobra application.`,
 		// 用法：h2m -e "postgresql" -u http://ft.cn/postgresql_docs_15_4.html -t "dist/Postgresql_docs" -n "div.toc" -c "div#docContent" -b https://www.postgresql.org/docs/current/
 		case "docker":
 			docker.Html2md(cmd, args)
-		// 用法：h2m -m "Guides" -e "docker" -u http://ft.cn/docker_guides_230830.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
-		// 用法：h2m -m "Manuals" -e "docker" -u http://ft.cn/docker_manuals_230830.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
-		// 用法：h2m -m "Reference" -e "docker" -u http://ft.cn/docker_reference_230830.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
+		// 用法：h2m -m "Guides" -e "docker" -u http://ft.cn/docker_guides_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
+		// 用法：h2m -m "Manuals" -e "docker" -u http://ft.cn/docker_manuals_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
+		// 用法：h2m -m "Reference" -e "docker" -u http://ft.cn/docker_reference_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
+		// 用法：h2m -m "Samples" -e "docker" -u http://ft.cn/docker_samples_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
 		case "npmjs":
 			npmjs.Html2md(cmd, args)
 			// 用法：h2m -e "npmjs" -u http://ft.cn/npmjs_230922.html -t "dist/npmjs_docs" -n "#menus" -c "#skip-nav" -b https://docs.npmjs.com/
+		case "fiber":
+			fiber.Html2md(cmd, args)
+			// 用法：h2m -e "fiber" -u http://ft.cn/fiber_docs_240205.html -t "dist/Fiber_docs" -n "nav#nav" -c "div.body" -b https://docs.gofiber.io/
+
 		}
 	},
 }

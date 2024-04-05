@@ -23,8 +23,7 @@ func fileNameFromMenuText(str string) string {
 
 	patternSlice := []string{
 		`·`,
-		`!`, `！`, `=`, `@`,
-		`\$`,
+		`!`, `！`, `=`, `@`, `#`, `\$`,
 		`\^`, `&`, `\*`,
 		`\(`, `\)`,
 		`（`, `）`,
@@ -49,7 +48,7 @@ func fileNameFromMenuText(str string) string {
 	return str
 }
 
-func findSpanATextAndHref(level int, liSel *goquery.Selection) (string, string) {
+func findSpanATextAndHref1(level int, liSel *goquery.Selection) (string, string) {
 	aSel := liSel.ChildrenFiltered("span").First().Find("a")
 	if aSel.Length() == 0 {
 		log.Fatal("第" + strconv.Itoa(level) + "层li标签下未发现span>a标签")
@@ -73,6 +72,36 @@ func findSpanATextAndHref(level int, liSel *goquery.Selection) (string, string) 
 		fmt.Println("menuLink = ", menuLink, ", existAttr = ", existAttr)
 		fmt.Println(aSel.Html())
 	}
+
+	return menuText, menuLink
+}
+
+func findSpanATextAndHref(level int, liSel *goquery.Selection) (string, string) {
+	aSel := liSel.ChildrenFiltered("a").First()
+	buttonSel := liSel.Children().First()
+	menuText, menuLink, existAttr := "", "", false
+	if buttonSel.Is("button") {
+		menuText = buttonSel.Text()
+	} else {
+		if aSel.Length() == 0 {
+			log.Fatal("第" + strconv.Itoa(level) + "层li标签下未发现a标签")
+		}
+		menuText = aSel.ChildrenFiltered("span").First().Text()
+
+		menuLink, existAttr = aSel.Attr("href")
+		if !existAttr {
+			log.Fatal("第" + strconv.Itoa(level) + "层li标签下未发现a标签存在href属性")
+		}
+	}
+
+	re1, _ := regexp.Compile(`\n`)
+	if re1.MatchString(menuText) {
+		menuText = strings.Replace(menuText, "\n", "", -1)
+	}
+
+	re2, _ := regexp.Compile(`\s+`)
+	menuText = re2.ReplaceAllString(menuText, " ")
+	menuText = strings.TrimSpace(menuText)
 
 	return menuText, menuLink
 }
@@ -171,6 +200,7 @@ func createDirAndMdFileAndWrite(newDirPath, fileNameWithoutExt, headContent stri
 }
 
 func createHtml(newFilePathWithoutExt string) {
+	return
 	file, err := os.Create(newFilePathWithoutExt + ".html")
 	if err != nil {
 		log.Fatal("创建文件：" + newFilePathWithoutExt + ".html" + " 失败")
@@ -179,6 +209,7 @@ func createHtml(newFilePathWithoutExt string) {
 }
 
 func httpGetContentAndWriteToHtmlFile(cmd *cobra.Command, link, newFilePathWithoutExt string) {
+	return
 	selector, _ := cmd.Flags().GetString("opt-content-selector")
 	baseUrl, _ := cmd.Flags().GetString("base-url")
 	//urlpath := "/" + strings.TrimPrefix(link, "/")
