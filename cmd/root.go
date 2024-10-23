@@ -50,7 +50,7 @@ to quickly create a Cobra application.`,
 		case "docker":
 			docker.Html2md(cmd, args)
 		// 用法：h2m -m "Guides" -e "docker" -u http://ft.cn/docker_guides_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
-		// 用法：h2m -m "Manuals" -e "docker" -u http://ft.cn/docker_manuals_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
+		// 用法：h2m -m "Manuals" -e "docker" -u http://ft.cn/docker_manuals_241023.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
 		// 用法：h2m -m "Reference" -e "docker" -u http://ft.cn/docker_reference_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
 		// 用法：h2m -m "Samples" -e "docker" -u http://ft.cn/docker_samples_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
 		case "npmjs":

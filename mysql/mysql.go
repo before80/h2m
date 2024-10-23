@@ -143,7 +143,7 @@ func createMdFileAndWrite(filePathWithoutExt, headContent string) {
 
 func createDirAndMdFileAndWrite(newDirPath, fileNameWithoutExt, headContent string) {
 	// 创建目录
-	err0 := os.Mkdir(newDirPath, 755)
+	err0 := os.Mkdir(newDirPath, 0755)
 	if err0 != nil {
 		log.Fatal("创建目录：" + newDirPath + " 失败")
 	}
@@ -220,7 +220,7 @@ func Html2md(cmd *cobra.Command, args []string) {
 
 	_, err = os.Stat(dist)
 	if !os.IsExist(err) {
-		err = os.Mkdir(dist, 755)
+		err = os.Mkdir(dist, 0755)
 		if err != nil {
 			log.Fatal("创建目录：" + dist + " 失败")
 		}

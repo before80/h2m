@@ -1,6 +1,6 @@
 module github.com/before80/h2m
 
-go 1.20
+go 1.23.1
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
