@@ -49,10 +49,10 @@ to quickly create a Cobra application.`,
 		// 用法：h2m -e "postgresql" -u http://ft.cn/postgresql_docs_15_4.html -t "dist/Postgresql_docs" -n "div.toc" -c "div#docContent" -b https://www.postgresql.org/docs/current/
 		case "docker":
 			docker.Html2md(cmd, args)
-		// 用法：h2m -m "Guides" -e "docker" -u http://ft.cn/docker_guides_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
-		// 用法：h2m -m "Manuals" -e "docker" -u http://ft.cn/docker_manuals_241023.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
-		// 用法：h2m -m "Reference" -e "docker" -u http://ft.cn/docker_reference_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
-		// 用法：h2m -m "Samples" -e "docker" -u http://ft.cn/docker_samples_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b https://docs.docker.com/
+		// 用法：h2m -m "get-started" -e "docker" -u http://ft.cn/docker_getstarted_241023.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b ""
+		// 用法：h2m -m "manuals" -e "docker" -u http://ft.cn/docker_manuals_241023.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b ""
+		// 用法：h2m -m "reference" -e "docker" -u http://ft.cn/docker_reference_241023.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b ""
+		// 用法：h2m -m "samp" -e "docker" -u http://ft.cn/docker_samples_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b ""
 		case "npmjs":
 			npmjs.Html2md(cmd, args)
 			// 用法：h2m -e "npmjs" -u http://ft.cn/npmjs_230922.html -t "dist/npmjs_docs" -n "#menus" -c "#skip-nav" -b https://docs.npmjs.com/
