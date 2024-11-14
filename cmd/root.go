@@ -11,6 +11,7 @@ import (
 	"github.com/before80/h2m/mysql"
 	"github.com/before80/h2m/npmjs"
 	"github.com/before80/h2m/postgresql"
+	"github.com/before80/h2m/python"
 	"github.com/before80/h2m/vscode"
 	"github.com/spf13/cobra"
 	"os"
@@ -59,7 +60,15 @@ to quickly create a Cobra application.`,
 		case "fiber":
 			fiber.Html2md(cmd, args)
 			// 用法：h2m -e "fiber" -u http://ft.cn/fiber_docs_240205.html -t "dist/Fiber_docs" -n "nav#nav" -c "div.body" -b https://docs.gofiber.io/
-
+		case "python":
+			python.Html2md(cmd, args)
+			// 用法：h2m -m "tutorial" -e "python" -u https://docs.python.org/zh-cn/3.13/tutorial/index.html -t "dist/python_docs" -n "div.compound" -c "section" -b "https://docs.python.org/zh-cn/3.13/tutorial/"
+			// 用法：h2m -m "reference" -e "python" -u https://docs.python.org/zh-cn/3.13/reference/index.html -t "dist/python_docs" -n "div.compound" -c "section" -b "https://docs.python.org/zh-cn/3.13/reference/"
+			// 用法：h2m -m "library" -e "python" -u https://docs.python.org/zh-cn/3.13/library/index.html -t "dist/python_docs" -n "div.compound" -c "section" -b "https://docs.python.org/zh-cn/3.13/library/"
+			// 用法：h2m -m "howto" -e "python" -u https://docs.python.org/zh-cn/3.13/howto/index.html -t "dist/python_docs" -n "section" -c "section" -b "https://docs.python.org/zh-cn/3.13/howto/"
+			// 用法：h2m -m "using" -e "python" -u https://docs.python.org/zh-cn/3.13/using/index.html -t "dist/python_docs" -n "div.compound" -c "section" -b "https://docs.python.org/zh-cn/3.13/using/"
+			// 用法：h2m -m "faq" -e "python" -u https://docs.python.org/zh-cn/3.13/faq/index.html -t "dist/python_docs" -n "div.compound" -c "section" -b "https://docs.python.org/zh-cn/3.13/faq/"
+			// 用法：h2m -m "c_api" -e "python" -u https://docs.python.org/zh-cn/3.13/c-api/index.html -t "dist/python_docs" -n "div.compound" -c "section" -b "https://docs.python.org/zh-cn/3.13/c-api/"
 		}
 	},
 }
