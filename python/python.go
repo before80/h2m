@@ -50,8 +50,14 @@ func fileNameFromMenuText(str string) string {
 
 func fileNameFromMenuLink(str string) string {
 	re1, _ := regexp.Compile(`\.`)
-	if loc := re1.FindStringIndex(str); loc != nil {
-		return str[0:loc[0]]
+	locS := re1.FindAllStringIndex(str, -1)
+	// 找到最后一个点的所在位置
+	if locS != nil {
+		str = str[0:locS[len(locS)-1][0]]
+		if re1.MatchString(str) {
+			return strings.Replace(str, ".", "_", -1)
+		}
+		return str
 	}
 	return str
 }
