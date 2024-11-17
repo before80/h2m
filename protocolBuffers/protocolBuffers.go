@@ -21,6 +21,12 @@ func fileNameFromMenuText(str string) string {
 	re2, _ := regexp.Compile(` — `)
 	str = re2.ReplaceAllString(str, "_")
 
+	re3, _ := regexp.Compile(`C#`)
+	str = re3.ReplaceAllString(str, "CSharp")
+
+	re4, _ := regexp.Compile(`C\+\+`)
+	str = re4.ReplaceAllString(str, "CPlusPlus")
+
 	patternSlice := []string{
 		`·`,
 		`!`, `！`, `=`, `@`, `#`, `\$`,
@@ -42,8 +48,8 @@ func fileNameFromMenuText(str string) string {
 		str = re.ReplaceAllString(str, "")
 	}
 
-	re3, _ := regexp.Compile(`\s+`)
-	str = re3.ReplaceAllString(str, "")
+	re5, _ := regexp.Compile(`\s+`)
+	str = re5.ReplaceAllString(str, "")
 
 	return str
 }
@@ -350,140 +356,137 @@ func Html2md(cmd *cobra.Command, args []string) {
 	fmt.Println("获取html内容中。。。")
 
 	liSelX0s.Each(func(liIndex0 int, liSel0 *goquery.Selection) {
-		if liIndex0 < (liselXLen - 3) {
+		// 判断li的子元素中是否有 ul 标签
+		// 若有 ul 标签，则需创建一个子目录，并在其中创建 _index.md（为了对等也可创建_index.html）
+		if liSel0.ChildrenFiltered("ul").First().Length() == 0 {
+			menuText0, menuLink0 = findATextAndHref(0, liSel0)
+			fileName0 := fileNameFromMenuText(menuText0)
+			createMdFileAndWrite(withSlashJoinStr(dist, fileName0), genMdHeadStr(menuText0, baseUrl, menuLink0, liIndex0))
+			// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+			httpGetContentAndWriteToHtmlFile(cmd, menuLink0, withSlashJoinStr(dist, fileName0))
+		} else {
+			menuText0, menuLink0 = findATextAndHref(0, liSel0)
+			fmt.Printf("level=%d,t=%s,l=%s\n", 0, menuText0, menuLink0)
+			dirName0 = fileNameFromMenuText(menuText0)
+			fileName0 := "_index"
+			createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0), fileName0, genMdHeadStr(menuText0, baseUrl, menuLink0, liIndex0))
+			// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+			createHtml(withSlashJoinStr(dist, dirName0, fileName0))
 
-			// 判断li的子元素中是否有 ul 标签
-			// 若有 ul 标签，则需创建一个子目录，并在其中创建 _index.md（为了对等也可创建_index.html）
-			if liSel0.ChildrenFiltered("ul").First().Length() == 0 {
-				menuText0, menuLink0 = findATextAndHref(0, liSel0)
-				fileName0 := fileNameFromMenuText(menuText0)
-				createMdFileAndWrite(withSlashJoinStr(dist, fileName0), genMdHeadStr(menuText0, baseUrl, menuLink0, liIndex0))
-				// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-				httpGetContentAndWriteToHtmlFile(cmd, menuLink0, withSlashJoinStr(dist, fileName0))
-			} else {
-				menuText0, menuLink0 = findATextAndHref(0, liSel0)
-				//fmt.Printf("level=%d,t=%s,l=%s\n", 0, menuText0, menuLink0)
-				dirName0 = fileNameFromMenuText(menuText0)
-				fileName0 := "_index"
-				createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0), fileName0, genMdHeadStr(menuText0, baseUrl, menuLink0, liIndex0))
-				// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-				createHtml(withSlashJoinStr(dist, dirName0, fileName0))
+			liSelX1s := liSel0.ChildrenFiltered("ul").First().ChildrenFiltered("li")
+			liSelX1s.Each(func(liIndex1 int, liSel1 *goquery.Selection) {
+				if liSel1.ChildrenFiltered("ul").First().Length() == 0 {
+					menuText1, menuLink1 = findATextAndHref(1, liSel1)
+					fileName1 := fileNameFromMenuText(menuText1)
+					createMdFileAndWrite(withSlashJoinStr(dist, dirName0, fileName1), genMdHeadStr(menuText1, baseUrl, menuLink1, liIndex1))
+					// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+					httpGetContentAndWriteToHtmlFile(cmd, menuLink1, withSlashJoinStr(dist, dirName0, fileName1))
+				} else {
+					menuText1, menuLink1 = findATextAndHref(1, liSel1)
+					fmt.Printf("level=%d,t=%s,l=%s\n", 1, menuText1, menuLink1)
+					dirName1 = fileNameFromMenuText(menuText1)
+					fileName1 := "_index"
+					createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1), fileName1, genMdHeadStr(menuText1, baseUrl, menuLink1, liIndex1))
+					// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+					createHtml(withSlashJoinStr(dist, dirName0, dirName1, fileName1))
 
-				liSelX1s := liSel0.ChildrenFiltered("ul").ChildrenFiltered("li")
-				liSelX1s.Each(func(liIndex1 int, liSel1 *goquery.Selection) {
-					if liSel1.ChildrenFiltered("div").First().ChildrenFiltered("button").Length() == 0 {
-						menuText1, menuLink1 = findATextAndHref(1, liSel1)
-						fileName1 := fileNameFromMenuText(menuText1)
-						createMdFileAndWrite(withSlashJoinStr(dist, dirName0, fileName1), genMdHeadStr(menuText1, baseUrl, menuLink1, liIndex1))
-						// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-						httpGetContentAndWriteToHtmlFile(cmd, menuLink1, withSlashJoinStr(dist, dirName0, fileName1))
-					} else {
-						menuText1, menuLink1 = findATextAndHref(1, liSel1)
-						//fmt.Printf("level=%d,t=%s,l=%s\n", 1, menuText1, menuLink1)
-						dirName1 = fileNameFromMenuText(menuText1)
-						fileName1 := "_index"
-						createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1), fileName1, genMdHeadStr(menuText1, baseUrl, menuLink1, liIndex1))
-						// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-						createHtml(withSlashJoinStr(dist, dirName0, dirName1, fileName1))
+					liSelX2s := liSel1.ChildrenFiltered("ul").First().ChildrenFiltered("li")
+					liSelX2s.Each(func(liIndex2 int, liSel2 *goquery.Selection) {
+						if liSel2.ChildrenFiltered("ul").First().Length() == 0 {
+							menuText2, menuLink2 = findATextAndHref(2, liSel2)
+							fileName2 := fileNameFromMenuText(menuText2)
+							createMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, fileName2), genMdHeadStr(menuText2, baseUrl, menuLink2, liIndex2))
+							// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+							httpGetContentAndWriteToHtmlFile(cmd, menuLink2, withSlashJoinStr(dist, dirName0, dirName1, fileName2))
+						} else {
+							menuText2, menuLink2 = findATextAndHref(2, liSel2)
+							fmt.Printf("level=%d,t=%s,l=%s\n", 2, menuText2, menuLink2)
+							dirName2 = fileNameFromMenuText(menuText2)
+							fileName2 := "_index"
+							createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2), fileName2, genMdHeadStr(menuText2, baseUrl, menuLink2, liIndex2))
+							// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+							createHtml(withSlashJoinStr(dist, dirName0, dirName1, dirName2, fileName2))
 
-						liSelX2s := liSel1.ChildrenFiltered("ul").ChildrenFiltered("li")
-						liSelX2s.Each(func(liIndex2 int, liSel2 *goquery.Selection) {
-							if liSel2.ChildrenFiltered("div").First().ChildrenFiltered("button").Length() == 0 {
-								menuText2, menuLink2 = findATextAndHref(2, liSel2)
-								fileName2 := fileNameFromMenuText(menuText2)
-								createMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, fileName2), genMdHeadStr(menuText2, baseUrl, menuLink2, liIndex2))
-								// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-								httpGetContentAndWriteToHtmlFile(cmd, menuLink2, withSlashJoinStr(dist, dirName0, dirName1, fileName2))
-							} else {
-								menuText2, menuLink2 = findATextAndHref(2, liSel2)
-								//fmt.Printf("level=%d,t=%s,l=%s\n", 2, menuText2, menuLink2)
-								dirName2 = fileNameFromMenuText(menuText2)
-								fileName2 := "_index"
-								createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2), fileName2, genMdHeadStr(menuText2, baseUrl, menuLink2, liIndex2))
-								// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-								createHtml(withSlashJoinStr(dist, dirName0, dirName1, dirName2, fileName2))
+							liSelX3s := liSel2.ChildrenFiltered("ul").First().ChildrenFiltered("li")
+							liSelX3s.Each(func(liIndex3 int, liSel3 *goquery.Selection) {
 
-								liSelX3s := liSel2.ChildrenFiltered("ul").ChildrenFiltered("li")
-								liSelX3s.Each(func(liIndex3 int, liSel3 *goquery.Selection) {
+								if liSel3.ChildrenFiltered("ul").First().Length() == 0 {
+									menuText3, menuLink3 = findATextAndHref(3, liSel3)
+									fileName3 := fileNameFromMenuText(menuText3)
+									createMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, fileName3), genMdHeadStr(menuText3, baseUrl, menuLink3, liIndex3))
+									// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+									httpGetContentAndWriteToHtmlFile(cmd, menuLink3, withSlashJoinStr(dist, dirName0, dirName1, dirName2, fileName3))
+								} else {
+									menuText3, menuLink3 = findATextAndHref(3, liSel3)
+									fmt.Printf("level=%d,t=%s,l=%s\n", 3, menuText3, menuLink3)
+									dirName3 = fileNameFromMenuText(menuText3)
+									fileName3 := "_index"
+									createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3), fileName3, genMdHeadStr(menuText3, baseUrl, menuLink3, liIndex3))
+									// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+									createHtml(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, fileName3))
 
-									if liSel3.ChildrenFiltered("div").First().ChildrenFiltered("button").Length() == 0 {
-										menuText3, menuLink3 = findATextAndHref(3, liSel3)
-										fileName3 := fileNameFromMenuText(menuText3)
-										createMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, fileName3), genMdHeadStr(menuText3, baseUrl, menuLink3, liIndex3))
-										// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-										httpGetContentAndWriteToHtmlFile(cmd, menuLink3, withSlashJoinStr(dist, dirName0, dirName1, dirName2, fileName3))
-									} else {
-										menuText3, menuLink3 = findATextAndHref(3, liSel3)
-										//fmt.Printf("level=%d,t=%s,l=%s\n", 3, menuText3, menuLink3)
-										dirName3 = fileNameFromMenuText(menuText3)
-										fileName3 := "_index"
-										createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3), fileName3, genMdHeadStr(menuText3, baseUrl, menuLink3, liIndex3))
-										// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-										createHtml(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, fileName3))
+									liSelX4s := liSel3.ChildrenFiltered("ul").First().ChildrenFiltered("li")
+									liSelX4s.Each(func(liIndex4 int, liSel4 *goquery.Selection) {
 
-										liSelX4s := liSel3.ChildrenFiltered("ul").ChildrenFiltered("li")
-										liSelX4s.Each(func(liIndex4 int, liSel4 *goquery.Selection) {
+										if liSel4.ChildrenFiltered("ul").First().Length() == 0 {
+											menuText4, menuLink4 = findATextAndHref(4, liSel4)
+											fileName4 := fileNameFromMenuText(menuText4)
+											createMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, fileName4), genMdHeadStr(menuText4, baseUrl, menuLink4, liIndex4))
+											// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+											httpGetContentAndWriteToHtmlFile(cmd, menuLink4, withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName4, fileName4))
+										} else {
+											menuText4, menuLink4 = findATextAndHref(4, liSel4)
+											//fmt.Printf("level=%d,t=%s,l=%s\n", 4, menuText4, menuLink4)
+											dirName4 = fileNameFromMenuText(menuText4)
+											fileName4 := "_index"
+											createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4), fileName4, genMdHeadStr(menuText4, baseUrl, menuLink4, liIndex4))
+											// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+											createHtml(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, fileName4))
 
-											if liSel4.ChildrenFiltered("ul").Length() == 0 {
-												menuText4, menuLink4 = findATextAndHref(4, liSel4)
-												fileName4 := fileNameFromMenuText(menuText4)
-												createMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, fileName4), genMdHeadStr(menuText4, baseUrl, menuLink4, liIndex4))
-												// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-												httpGetContentAndWriteToHtmlFile(cmd, menuLink4, withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName4, fileName4))
-											} else {
-												menuText4, menuLink4 = findATextAndHref(4, liSel4)
-												//fmt.Printf("level=%d,t=%s,l=%s\n", 4, menuText4, menuLink4)
-												dirName4 = fileNameFromMenuText(menuText4)
-												fileName4 := "_index"
-												createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4), fileName4, genMdHeadStr(menuText4, baseUrl, menuLink4, liIndex4))
-												// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-												createHtml(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, fileName4))
+											liSelX5s := liSel4.ChildrenFiltered("ul").First().ChildrenFiltered("li")
+											liSelX5s.Each(func(liIndex5 int, liSel5 *goquery.Selection) {
 
-												liSelX5s := liSel4.ChildrenFiltered("ul").ChildrenFiltered("li")
-												liSelX5s.Each(func(liIndex5 int, liSel5 *goquery.Selection) {
+												if liSel5.ChildrenFiltered("ul").First().Length() == 0 {
+													menuText5, menuLink5 = findATextAndHref(5, liSel5)
+													fileName5 := fileNameFromMenuText(menuText5)
+													createMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, fileName5), genMdHeadStr(menuText5, baseUrl, menuLink5, liIndex5))
+													// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+													httpGetContentAndWriteToHtmlFile(cmd, menuLink5, withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, fileName5))
+												} else {
+													menuText5, menuLink5 = findATextAndHref(5, liSel5)
+													//fmt.Printf("level=%d,t=%s,l=%s\n", 5, menuText5, menuLink5)
+													dirName5 = fileNameFromMenuText(menuText5)
+													fileName5 := "_index"
+													createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, dirName5), fileName5, genMdHeadStr(menuText5, baseUrl, menuLink5, liIndex5))
+													// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+													createHtml(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, dirName5, fileName5))
 
-													if liSel5.ChildrenFiltered("ul").Length() == 0 {
-														menuText5, menuLink5 = findATextAndHref(5, liSel5)
-														fileName5 := fileNameFromMenuText(menuText5)
-														createMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, fileName5), genMdHeadStr(menuText5, baseUrl, menuLink5, liIndex5))
-														// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-														httpGetContentAndWriteToHtmlFile(cmd, menuLink5, withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, fileName5))
-													} else {
-														menuText5, menuLink5 = findATextAndHref(5, liSel5)
-														//fmt.Printf("level=%d,t=%s,l=%s\n", 5, menuText5, menuLink5)
-														dirName5 = fileNameFromMenuText(menuText5)
-														fileName5 := "_index"
-														createDirAndMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, dirName5), fileName5, genMdHeadStr(menuText5, baseUrl, menuLink5, liIndex5))
-														// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-														createHtml(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, dirName5, fileName5))
+													liSelX6s := liSel5.ChildrenFiltered("ul").ChildrenFiltered("li")
+													liSelX6s.Each(func(liIndex6 int, liSel6 *goquery.Selection) {
 
-														liSelX6s := liSel5.ChildrenFiltered("ul").ChildrenFiltered("li")
-														liSelX6s.Each(func(liIndex6 int, liSel6 *goquery.Selection) {
+														if liSel6.ChildrenFiltered("ul").Length() == 0 {
+															menuText6, menuLink6 = findATextAndHref(6, liSel6)
+															//fmt.Printf("level=%d,t=%s,l=%s\n", 6, menuText6, menuLink6)
+															fileName6 := fileNameFromMenuText(menuText6)
+															createMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, dirName5, fileName6), genMdHeadStr(menuText6, baseUrl, menuLink6, liIndex6))
+															// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
+															httpGetContentAndWriteToHtmlFile(cmd, menuLink6, withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName4, dirName5, fileName6))
+														} else {
+															panic("没想到层数竟然达到了6层！")
+														}
+													})
+												}
+											})
+										}
+									})
 
-															if liSel6.ChildrenFiltered("ul").Length() == 0 {
-																menuText6, menuLink6 = findATextAndHref(6, liSel6)
-																//fmt.Printf("level=%d,t=%s,l=%s\n", 6, menuText6, menuLink6)
-																fileName6 := fileNameFromMenuText(menuText6)
-																createMdFileAndWrite(withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName3, dirName4, dirName5, fileName6), genMdHeadStr(menuText6, baseUrl, menuLink6, liIndex6))
-																// 获取链接html指定选择器下的内容到新创建的以.html结尾的文件中
-																httpGetContentAndWriteToHtmlFile(cmd, menuLink6, withSlashJoinStr(dist, dirName0, dirName1, dirName2, dirName4, dirName5, fileName6))
-															} else {
-																panic("没想到层数竟然达到了6层！")
-															}
-														})
-													}
-												})
-											}
-										})
+								}
+							})
+						}
+					})
+				}
 
-									}
-								})
-							}
-						})
-					}
-
-				})
-			}
+			})
 		}
 	})
 
