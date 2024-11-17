@@ -113,7 +113,7 @@ isCJKLanguage = true
 draft = false
 +++
 
-> 原文: [%s](%s)
+> 原文：[%s](%s)
 >
 > 收录该文档的时间：%s
 `

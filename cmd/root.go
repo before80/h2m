@@ -11,6 +11,7 @@ import (
 	"github.com/before80/h2m/mysql"
 	"github.com/before80/h2m/npmjs"
 	"github.com/before80/h2m/postgresql"
+	"github.com/before80/h2m/protocolBuffers"
 	"github.com/before80/h2m/python"
 	"github.com/before80/h2m/vscode"
 	"github.com/spf13/cobra"
@@ -54,6 +55,10 @@ to quickly create a Cobra application.`,
 		// 用法：h2m -m "manuals" -e "docker" -u http://ft.cn/docker_manuals_241023.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b ""
 		// 用法：h2m -m "reference" -e "docker" -u http://ft.cn/docker_reference_241023.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b ""
 		// 用法：h2m -m "samp" -e "docker" -u http://ft.cn/docker_samples_240404.html -t "dist/docker_docs" -n "#sectiontree" -c "article" -b ""
+		case "probuf":
+			protocolBuffers.Html2md(cmd, args)
+		// 用法：h2m -m "docs" -e "probuf" -u https://protobuf.dev/ -t "dist/probuf_docs" -n "#td-section-nav" -c "div.td-content" -b "https://protobuf.dev/"
+
 		case "npmjs":
 			npmjs.Html2md(cmd, args)
 			// 用法：h2m -e "npmjs" -u http://ft.cn/npmjs_230922.html -t "dist/npmjs_docs" -n "#menus" -c "#skip-nav" -b https://docs.npmjs.com/
