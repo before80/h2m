@@ -45,7 +45,7 @@ to quickly create a Cobra application.`,
 		// 用法：h2m -e "vscode" -u http://ft.cn/vscode_docs_240112.html -t "dist/Vscode_docs" -n "nav#docs-navbar" -c "div.body" -b https://code.visualstudio.com/
 		case "grpc":
 			grpc.Html2md(cmd, args)
-		// 用法：h2m -e "grpc" -u http://ft.cn/grpc_docs_240117.html -t "dist/grpc_docs" -n "nav#td-section-nav" -c "main" -b https://grpc.io/
+		// 用法：h2m -m "docs" -e "grpc" -u https://grpc.io/docs/ -t "dist/grpc_docs" -n "nav#td-section-nav" -c "main" -b https://grpc.io/
 		case "postgresql":
 			postgresql.Html2md(cmd, args)
 		// 用法：h2m -e "postgresql" -u http://ft.cn/postgresql_docs_15_4.html -t "dist/Postgresql_docs" -n "div.toc" -c "div#docContent" -b https://www.postgresql.org/docs/current/
