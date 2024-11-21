@@ -41,6 +41,7 @@ func fileNameFromMenuText(str string) string {
 		`\?`, `？`,
 		`\/`, `\|`,
 		`—`,
+		`❤`,
 	}
 
 	for _, pattern := range patternSlice {

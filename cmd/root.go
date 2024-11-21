@@ -13,6 +13,7 @@ import (
 	"github.com/before80/h2m/postgresql"
 	"github.com/before80/h2m/protocolBuffers"
 	"github.com/before80/h2m/python"
+	"github.com/before80/h2m/rod"
 	"github.com/before80/h2m/vscode"
 	"github.com/spf13/cobra"
 	"os"
@@ -46,6 +47,7 @@ to quickly create a Cobra application.`,
 		case "grpc":
 			grpc.Html2md(cmd, args)
 		// 用法：h2m -m "docs" -e "grpc" -u https://grpc.io/docs/ -t "dist/grpc_docs" -n "nav#td-section-nav" -c "main" -b https://grpc.io/
+		// 用法：h2m -m "blog" -e "grpc" -u https://grpc.io/blog/ -t "dist/grpc_docs" -n "nav#td-section-nav" -c "main" -b https://grpc.io/
 		case "postgresql":
 			postgresql.Html2md(cmd, args)
 		// 用法：h2m -e "postgresql" -u http://ft.cn/postgresql_docs_15_4.html -t "dist/Postgresql_docs" -n "div.toc" -c "div#docContent" -b https://www.postgresql.org/docs/current/
@@ -105,6 +107,9 @@ to quickly create a Cobra application.`,
 			// 用法：h2m -m "unix" -e "python" -u https://docs.python.org/zh-cn/3.13/library/unix.html -t "dist/python_docs/library" -n "div.compound" -c "section" -b "https://docs.python.org/zh-cn/3.13/library/"
 			// 用法：h2m -m "cmdline" -e "python" -u https://docs.python.org/zh-cn/3.13/library/cmdline.html -t "dist/python_docs/library" -n "section" -c "section" -b "https://docs.python.org/zh-cn/3.13/library/"
 			// 用法：h2m -m "superseded" -e "python" -u https://docs.python.org/zh-cn/3.13/library/superseded.html -t "dist/python_docs/library" -n "section" -c "section" -b "https://docs.python.org/zh-cn/3.13/library/"
+		case "rod":
+			rod.Html2md(cmd, args)
+			// 用法：h2m -m "docs" -e "rod" -u https://go-rod.github.io/i18n/zh-CN/#/ -t "dist/rod_docs" -n "div.sidebar-nav" -c "section" -b "https://go-rod.github.io/i18n/zh-CN/"
 		}
 	},
 }
